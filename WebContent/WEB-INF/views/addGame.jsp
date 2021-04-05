@@ -15,6 +15,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body style = "background-color: #1f2833;">
+
+<%
+	if(session.getAttribute("userName") == null){
+		response.sendRedirect("error");
+	}
+%>
+
     <div class = "container" style="background-color: #0b0c10; ">
         <div class = "jumbotron text-center" style ="background-color:#66fcf1">
             <h1>Add Game to Profile</h1>
@@ -27,7 +34,6 @@
             </nav>
         </div>
         <form action="addNewGame" method="POST">
-        	<input type = "text" value = "Frenchy" name = "userName" readonly hidden = true/>
             <input type="text" name="gameName" placeholder="Name of Game"/>
             <input type= "number" name = "gameHours" step = 0.01 placeholder="Hours Played"/>
             <input type= "number" name = "timesCompleted" placeholder="Times Completed"/>

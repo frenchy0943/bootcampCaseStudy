@@ -1,7 +1,8 @@
 package com.VideoGameTracker.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,102 +18,151 @@ import com.VideoGameTracker.service.GameService;
 import com.VideoGameTracker.service.UserGameService;
 import com.VideoGameTracker.service.UserService;
 
-
 @Controller
 public class MainController {
 
+	private String userName = "";
+
 	@Autowired
 	UserService us;
-	
+
 	@Autowired
 	GameService gs;
-	
+
 	@Autowired
 	UserGameService ugs;
-	
+
 	@RequestMapping("/")
 	public String indexHandler() {
-		return "login";//view file name
+		return "login";// view file name
 	}
-	
+
 	@RequestMapping("/register")
 	public String registerHandler() {
-		return "register";//view file name
+		return "register";// view file name
 	}
-	
+
 	@RequestMapping("/login")
 	public String loginHandler() {
-		return "login";//view file name
+		return "login";// view file name
 	}
-	
+
 	@RequestMapping("/profile")
 	public ModelAndView profileHandler() {
 		ModelAndView mav = new ModelAndView("profile");
-		List<UserGame> userGames = ugs.getAllUserGamesById("Frenchy");
+		List<UserGame> userGames = ugs.getAllUserGamesById(userName);
 		System.out.println(userGames);
 		mav.addObject("profileListBean", userGames);
-		return mav;//view file name
+		return mav;// view file name
 	}
-	
+
 	@RequestMapping("/addGame")
 	public String addGameHandler() {
-		return "addGame";//view file name
+		return "addGame";// view file name
 	}
-	
+
 	@RequestMapping("/playGame")
 	public ModelAndView playGameHandler() {
 		ModelAndView mav = new ModelAndView("playGame");
-		List<Game> games = us.getById("Frenchy").getCurrentGames();
-		mav.addObject("playListBean", games);
-		System.out.println(games);
-		return mav;//view file name
+		if (!userName.equals("")) {
+			List<Game> games = us.getById(userName).getCurrentGames();
+			mav.addObject("playListBean", games);
+		}
+		return mav;// view file name
 	}
-	
+
 	@RequestMapping("/editGame")
 	public ModelAndView editGameHandler() {
 		ModelAndView mav = new ModelAndView("editGame");
-		List<UserGame> games = ugs.getAllUserGamesById("Frenchy");
+		List<UserGame> games = ugs.getAllUserGamesById(userName);
 		mav.addObject("editListBean", games);
-		return mav;//view file name
+		return mav;// view file name
 	}
-	
+
 	@RequestMapping("/compare")
 	public ModelAndView compareHandler() {
 		ModelAndView mav = new ModelAndView("compare");
-		List<UserGame> userGames = ugs.getAllUserGamesById("Frenchy");
+		List<UserGame> userGames = ugs.getAllUserGamesById(userName);
 		mav.addObject("compareListBean", userGames);
-		return mav;//view file name
+		return mav;// view file name
 	}
-	
+
 	@RequestMapping("/addNewGame")
 	public String newGameHandler(@ModelAttribute UserGame ug) {
-		ugs.linkUserAndGame(ug.getUserName(), ug.getGameName(), ug.getGameHours(), ug.getTimesCompleted(), ug.getCurrentList());
+		if (!userName.equals("")) {
+			ugs.linkUserAndGame(userName, ug.getGameName(), ug.getGameHours(), ug.getTimesCompleted(),
+					ug.getCurrentList());
+		}
 		return "addGame";
 	}
-	
+
 	@RequestMapping("/editGameDetails")
 	public ModelAndView editGameDetailsHandler(@ModelAttribute UserGame ug) {
-		ugs.updateUserGame(ug.getUserName(), ug.getGameName(), ug.getGameHours(), ug.getTimesCompleted(), ug.getCurrentList());
+		if (!userName.equals("")) {
+			double gameHours = 0.0;
+			int timesCompleted = 0;
+			if(ug.getGameHours() == null) {
+				gameHours = ugs.getUserGame(userName, ug.getGameName()).getGameHours();
+			}else {
+				gameHours = ug.getGameHours();
+			}
+			
+			if(ug.getTimesCompleted() == null) {
+				timesCompleted = ugs.getUserGame(userName, ug.getGameName()).getTimesCompleted();
+			}else {
+				timesCompleted = ug.getTimesCompleted();
+			}
+			ugs.updateUserGame(userName, ug.getGameName(), gameHours, timesCompleted,
+					ug.getCurrentList());
+		}
 		return editGameHandler();
 	}
-	
+
 	@RequestMapping("/compareWithUsers")
 	public ModelAndView compareWithUsers(@ModelAttribute UserGame ug) {
 		ModelAndView mav = compareHandler();
-		List<UserGame> userGames = ugs.getAllByGameName(ug.getGameName());
-		mav.addObject("compareGamesListBean", userGames);
+		if (!userName.equals("")) {
+			List<UserGame> userGames = ugs.getAllByGameName(ug.getGameName());
+			mav.addObject("compareGamesListBean", userGames);
+		}
 		return mav;
 	}
-	
+
 	@RequestMapping("/updateGameHours")
 	public ModelAndView updateGameHoursHandler(@ModelAttribute UserGameHours ugh) {
-		UserGame ug = ugs.getUserGame(ugh.getUserName(), ugh.getGameName());
 		ModelAndView mav = playGameHandler();
-		Double gameHours = ug.getGameHours() + ugh.getGameHours();
-		gameHours *= 100;
-		gameHours = (double)Math.round(gameHours)/100;
-		ugs.updateGameHours(ug.getUserName(), ug.getGameName(), gameHours);
+		if (!userName.equals("")) {
+			UserGame ug = ugs.getUserGame(userName, ugh.getGameName());
+			Double gameHours = ug.getGameHours() + ugh.getGameHours();
+			gameHours *= 100;
+			gameHours = (double) Math.round(gameHours) / 100;
+			ugs.updateGameHours(ug.getUserName(), ug.getGameName(), gameHours);
+		}
 		return mav;
 	}
+
+	@RequestMapping("/registerNewUser")
+	public String registerNewUserHandler(@ModelAttribute User user) {
+		if (us.registerUser(user.getUserName(), user.getPassword())) {
+			return "login";
+		} else {
+			return "error";
+		}
+	}
+
+	@RequestMapping("/loginAttempt")
+	public ModelAndView loginAttemptHandler(@ModelAttribute User user, HttpServletRequest request) {
+		if (us.validateUser(user.getUserName(), user.getPassword())) {
+			this.userName = user.getUserName();
+			request.getSession().setAttribute("userName", user.getUserName());
+			return profileHandler();
+		}
+		return new ModelAndView("error");
+	}
 	
+	@RequestMapping("/error")
+	public String errorHandler() {
+		return "error";
+	}
+
 }

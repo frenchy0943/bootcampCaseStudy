@@ -21,11 +21,10 @@
         <div class = "jumbotron text-center" style ="background-color:#66fcf1">
             <h1>Register New Account</h1>
         </div>
-        <form>
-            <input type="text" id="email" placeholder="Username"/>
-            <input type="password" id="password" placeholder="Password"/>
-            <input id = "passwordCheck" placeholder="Re-enter password">
-            <button type = "button" onclick="checkLogin()">Register</button>
+        <form action="registerNewUser" method = "POST">
+            <input type="text" name = "userName" placeholder="Username"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <button type = "submit" >Register</button>
         </form>
         <div style="color: white">
            Already have an account? Click <a href="login">here</a> to login!

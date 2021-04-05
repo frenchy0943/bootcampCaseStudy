@@ -16,6 +16,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body style = "background-color: #1f2833;">
+
+<%
+	if(session.getAttribute("userName") == null){
+		response.sendRedirect("error");
+	}
+%>
+
     <div class = "container" style="background-color: #0b0c10; ">
         <div class = "jumbotron text-center" style ="background-color:#66fcf1">
             <h1>Edit Game</h1>
@@ -28,7 +35,6 @@
             </nav>
         </div>
         <form action="editGameDetails" method="POST">
-        <input type = "text" value = "Frenchy" name = "userName" readonly hidden=true/>
            <select name="gameName">
            <c:forEach var="userGame" items="${editListBean }">
                 <option value="${userGame.gameName}">${userGame.gameName} </option>

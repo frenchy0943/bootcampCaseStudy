@@ -23,10 +23,10 @@
         <div class = "jumbotron text-center" style ="background-color:#66fcf1">
             <h1>Login</h1>
         </div>
-        <form>
-            <input type="text" id="email" placeholder="Username"/>
-            <input type="password" id="password" placeholder="Password"/>
-            <a href = "profile"><button type = "button">Login</button></a>
+        <form action = "loginAttempt" method = "POST">
+            <input type="text" name="userName" placeholder="Username"/>
+            <input type="password" name="password" placeholder="Password"/>
+            <button type = "submit">Login</button>
         </form>
         <div style="color: white">
             Don't have an account? Click <a href="register">here</a> to register!

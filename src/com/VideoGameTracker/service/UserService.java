@@ -40,6 +40,15 @@ public class UserService {
 		return flag;
 	}
 	
+	public boolean registerUser(String userName, String password) {
+		if(!ur.existsById(userName)) {
+			ur.save(new User(userName, password));
+			return true;
+		}
+		//user with that username already exists error
+		return false;
+	}
+	
 	public void addToList(String userName, Game game, String listToAdd) {
 		User user = getById(userName);
 		if (listToAdd.equals("current")) {

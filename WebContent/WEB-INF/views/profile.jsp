@@ -20,6 +20,12 @@
 
 </head>
 <body style = "background-color: #1f2833;">
+
+<%
+	if(session.getAttribute("userName") == null){
+		response.sendRedirect("error");
+	}
+%>
     <div class = "container" style="background-color: #0b0c10; ">
         <div class = "jumbotron text-center" style ="background-color:#66fcf1">
             <h1>Profile</h1>

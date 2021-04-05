@@ -7,10 +7,12 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+
 
 @Entity
 public class User {
@@ -25,33 +27,36 @@ public class User {
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL
 			)
-	@JoinTable(name = "user_backlog")
+	@JoinTable(name = "user_backlog"
+			
+			)
 	private List<Game> backLogGames = new ArrayList<Game>();
 	@OneToMany(
 			targetEntity = Game.class,
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL
 			)
-	@JoinTable(name = "user_current")
+	@JoinTable(name = "user_current"
+			
+			)
 	private List<Game> currentGames = new ArrayList<Game>();
 	@OneToMany(
 			targetEntity = Game.class,
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL
 			)
-	@JoinTable(name="user_completed")
+	@JoinTable(name="user_completed"
+			
+			)
 	private List<Game> completedGames = new ArrayList<Game>();
 	
 	public User() {
 	
 	}
 	
-	public User(String userName, String password, List<Game> backlogGames, List<Game> currentGames, List<Game> completedGames) {
+	public User(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
-		this.backLogGames = backlogGames;
-		this.currentGames = currentGames;
-		this.completedGames = completedGames;
 	}
 
 	public String getUserName() {
