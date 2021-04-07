@@ -70,8 +70,12 @@ public class UserGameService {
 		return ugr.findAllByUserName(userName);
 	}
 
-	public List<UserGame> getAllByGameName(String gameName) {
-		return ugr.findAllByGameName(gameName);
+	public List<UserGame> getAllByGameNameSortByHours(String gameName) {
+		return ugr.findAllByGameNameOrderByGameHoursDesc(gameName);
+	}
+	
+	public List<UserGame> getAllByGameNameSortByCompletions(String gameName){
+		return ugr.findAllByGameNameOrderByTimesCompletedDesc(gameName);
 	}
 
 	public void updateGameHours(String userName, String gameName, double hours) {

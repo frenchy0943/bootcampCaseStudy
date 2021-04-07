@@ -86,7 +86,7 @@ public class MainController {
 		mav.addObject("compareListBean", userGames);
 		return mav;// view file name
 	}
-	
+
 	@RequestMapping("/deleteGame")
 	public ModelAndView deleteHandler() {
 		ModelAndView mav = new ModelAndView("deleteGame");
@@ -109,28 +109,37 @@ public class MainController {
 		if (!userName.equals("") && !ug.getGameName().equals("")) {
 			double gameHours = 0.0;
 			int timesCompleted = 0;
-			if(ug.getGameHours() == null) {
+			if (ug.getGameHours() == null) {
 				gameHours = ugs.getUserGame(userName, ug.getGameName()).getGameHours();
-			}else {
+			} else {
 				gameHours = ug.getGameHours();
 			}
-			
-			if(ug.getTimesCompleted() == null) {
+
+			if (ug.getTimesCompleted() == null) {
 				timesCompleted = ugs.getUserGame(userName, ug.getGameName()).getTimesCompleted();
-			}else {
+			} else {
 				timesCompleted = ug.getTimesCompleted();
 			}
-			ugs.updateUserGame(userName, ug.getGameName(), gameHours, timesCompleted,
-					ug.getCurrentList());
+			ugs.updateUserGame(userName, ug.getGameName(), gameHours, timesCompleted, ug.getCurrentList());
 		}
 		return editGameHandler();
 	}
 
-	@RequestMapping("/compareWithUsers")
-	public ModelAndView compareWithUsers(@ModelAttribute UserGame ug) {
+	@RequestMapping(value = "/compareWithUsers", params = "hoursSort")
+	public ModelAndView compareWithUsersHours(@ModelAttribute UserGame ug) {
 		ModelAndView mav = compareHandler();
 		if (!userName.equals("")) {
-			List<UserGame> userGames = ugs.getAllByGameName(ug.getGameName());
+			List<UserGame> userGames = ugs.getAllByGameNameSortByHours(ug.getGameName());
+			mav.addObject("compareGamesListBean", userGames);
+		}
+		return mav;
+	}
+
+	@RequestMapping(value = "/compareWithUsers", params = "completedSort")
+	public ModelAndView compareWithUsersCompletions(@ModelAttribute UserGame ug) {
+		ModelAndView mav = compareHandler();
+		if (!userName.equals("")) {
+			List<UserGame> userGames = ugs.getAllByGameNameSortByCompletions(ug.getGameName());
 			mav.addObject("compareGamesListBean", userGames);
 		}
 		return mav;
@@ -153,7 +162,7 @@ public class MainController {
 		if (us.registerUser(user.getUserName(), user.getPassword())) {
 			return "login";
 		} else {
-			request.getSession().setAttribute("error", "Username is invalid or already in use");
+			request.getSession().setAttribute("error", "Username is already in use");
 			return "error";
 		}
 	}
@@ -168,19 +177,20 @@ public class MainController {
 		request.getSession().setAttribute("error", "Invalid Login Credentials. Please try again");
 		return new ModelAndView("error");
 	}
-	
+
 	@RequestMapping("/error")
 	public String errorHandler() {
 		return "error";
 	}
-	
+
 	@RequestMapping("/removeGame")
 	public ModelAndView removeGameHandler(@ModelAttribute UserGame ug) {
-		ugs.removeGame(userName, ug.getGameName());
+		if (!ug.getGameName().equals("")) {
+			ugs.removeGame(userName, ug.getGameName());
+		}
 		return deleteHandler();
 	}
 
-	
 	@RequestMapping("/logout")
 	public String logoutHandler(HttpServletRequest request) {
 		request.getSession().setAttribute("userName", null);

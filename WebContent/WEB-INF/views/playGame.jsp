@@ -49,9 +49,12 @@
             <button type="button" onclick="startTimer()">Start Timer</button>
             <button type="button" onclick="endTimer()">End Timer</button>
             <label style="color: white;" for="Time of session">Time Played this session (in hours):</label>
-            <input type="text" name = "gameHours" id = "Time this session" readonly>
+            <input type="number" name = "gameHours" id = "Time this session" value = 0 readonly>
             <button type="submit">Update Game</button>
         </form>
+        <div style = "color: white;" id = "note">Note: Timer NOT started. If you update now, your game will NOT be updated!</div>
     </div>
+    
+    
 </body>
 </html>

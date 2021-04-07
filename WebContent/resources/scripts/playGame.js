@@ -2,9 +2,9 @@ var startTime = 0;
 var endTime = 0;
 var timerStarted = false;
 function startTimer(){
-	if(!timeStarted){
+	if(!timerStarted){
     	startTime = Date.now();
-    	document.getElementById("Time this session").value = "Timer started";
+    	document.getElementById("note").innerHTML = "Note: Timer started. If you update now your game will NOT be updated, and your time will be lost!";
     	timerStarted = true;
     }
 }
@@ -18,5 +18,6 @@ function endTimer(){
     var timePlayedMin = timePlayedSec / 60;
     var timePlayedHours = timePlayedSec / 60;
     document.getElementById("Time this session").value = timePlayedHours;
+    document.getElementById("note").innerHTML = "Note: Timer finished. Press update to add time to your game. If you start the timer again before updating your time will be lost.";
     timerStarted = false;
 }

@@ -50,7 +50,8 @@
             </c:forEach>
                 </select>
 
-                <button type="submit">Compare</button>
+                <button type="submit" name = "hoursSort" value = "hoursSort">Compare By Hours</button>
+                <button type="submit" name = "completedSort" value = "completedSort">Compare By completions</button>
             </form>
         </div>
 
