@@ -16,7 +16,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 
-<script src="<c:url value="/resources/scripts/login.js" />"></script>
 </head>
 <body style = "background-color: #1f2833;">
     <div class = "container" style="background-color: #0b0c10; ">

@@ -20,6 +20,7 @@
 <%
 	if(session.getAttribute("userName") == null){
 		response.sendRedirect("error");
+		session.setAttribute("error", "You are not logged in");
 	}
 %>
 
@@ -31,6 +32,7 @@
                 <a href = "addGame">Add Game</a>|
                 <a href = "playGame">Play Game</a>|
                 <a href = "#">Edit Game</a>| 
+                <a href = "deleteGame">Delete Game</a>|
                 <a href = "compare">Compare</a>|
             </nav>
         </div>

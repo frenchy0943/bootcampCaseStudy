@@ -15,38 +15,40 @@ public class UserGameService {
 
 	@Autowired
 	UserGameRepository ugr;
-	
+
 	@Autowired
 	GameService gs;
-	
+
 	@Autowired
 	UserService us;
-	
+
 	public void deleteUserGame(UserGame ug) {
 		ugr.delete(ug);
 	}
-	
+
 	public void addUserGame(UserGame ug) {
 		ugr.save(ug);
 	}
-	
+
 	public UserGame getUserGame(String userName, String gameName) {
 		return ugr.getUserGameByUserNameAndGameName(userName, gameName);
 	}
-	
+
 	public void linkUserAndGame(String userName, String gameName, double hours, int timesCompleted, String list) {
 		Game game = null;
-		if(!gs.exists(gameName)) {
-			game = new Game(gameName);
-			gs.addGame(game);
-		}else {
-			game = gs.getGame(gameName);
+		if (!ugr.existsByUserNameAndGameName(userName, gameName)) {
+			if (!gs.exists(gameName)) {
+				game = new Game(gameName);
+				gs.addGame(game);
+			} else {
+				game = gs.getGame(gameName);
+			}
+			us.addToList(userName, game, list);
+			UserGame ug = new UserGame(userName, gameName, hours, timesCompleted, list);
+			ugr.save(ug);
 		}
-		us.addToList(userName, game, list);
-		UserGame ug = new UserGame(userName, gameName, hours, timesCompleted, list);
-		ugr.save(ug);
 	}
-	
+
 	public void updateUserGame(String userName, String gameName, double hours, int timesCompleted, String list) {
 		UserGame ug = getUserGame(userName, gameName);
 		ug.setGameHours(hours);
@@ -56,21 +58,22 @@ public class UserGameService {
 		ug.setCurrentList(list);
 		ugr.save(ug);
 	}
+
 	@Transactional
 	public void removeGame(String userName, String gameName) {
 		UserGame ug = getUserGame(userName, gameName);
 		ugr.deleteUserGameByUserNameAndGameName(userName, gameName);
 		us.removeFromList(userName, gs.getGame(gameName), ug.getCurrentList());
 	}
-	
-	public List<UserGame> getAllUserGamesById(String userName){
+
+	public List<UserGame> getAllUserGamesById(String userName) {
 		return ugr.findAllByUserName(userName);
 	}
-	
-	public List<UserGame> getAllByGameName(String gameName){
+
+	public List<UserGame> getAllByGameName(String gameName) {
 		return ugr.findAllByGameName(gameName);
 	}
-	
+
 	public void updateGameHours(String userName, String gameName, double hours) {
 		UserGame ug = getUserGame(userName, gameName);
 		ug.setGameHours(hours);

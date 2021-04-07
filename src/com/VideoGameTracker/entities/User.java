@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User {
@@ -22,32 +18,26 @@ public class User {
 	
 	private String password;
 	
-	@OneToMany(
+	@ManyToMany(
 			targetEntity = Game.class,
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL
 			)
-	@JoinTable(name = "user_backlog"
-			
-			)
+	@JoinTable(name = "user_backlog")
 	private List<Game> backLogGames = new ArrayList<Game>();
-	@OneToMany(
+	@ManyToMany(
 			targetEntity = Game.class,
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL
 			)
-	@JoinTable(name = "user_current"
-			
-			)
+	@JoinTable(name = "user_current")
 	private List<Game> currentGames = new ArrayList<Game>();
-	@OneToMany(
+	@ManyToMany(
 			targetEntity = Game.class,
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL
 			)
-	@JoinTable(name="user_completed"
-			
-			)
+	@JoinTable(name="user_completed")
 	private List<Game> completedGames = new ArrayList<Game>();
 	
 	public User() {

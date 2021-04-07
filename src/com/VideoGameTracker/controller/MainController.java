@@ -86,6 +86,14 @@ public class MainController {
 		mav.addObject("compareListBean", userGames);
 		return mav;// view file name
 	}
+	
+	@RequestMapping("/deleteGame")
+	public ModelAndView deleteHandler() {
+		ModelAndView mav = new ModelAndView("deleteGame");
+		List<UserGame> userGames = ugs.getAllUserGamesById(userName);
+		mav.addObject("deleteListBean", userGames);
+		return mav;
+	}
 
 	@RequestMapping("/addNewGame")
 	public String newGameHandler(@ModelAttribute UserGame ug) {
@@ -130,7 +138,6 @@ public class MainController {
 
 	@RequestMapping("/updateGameHours")
 	public ModelAndView updateGameHoursHandler(@ModelAttribute UserGameHours ugh) {
-		ModelAndView mav = playGameHandler();
 		if (!userName.equals("")) {
 			UserGame ug = ugs.getUserGame(userName, ugh.getGameName());
 			Double gameHours = ug.getGameHours() + ugh.getGameHours();
@@ -138,14 +145,15 @@ public class MainController {
 			gameHours = (double) Math.round(gameHours) / 100;
 			ugs.updateGameHours(ug.getUserName(), ug.getGameName(), gameHours);
 		}
-		return mav;
+		return playGameHandler();
 	}
 
 	@RequestMapping("/registerNewUser")
-	public String registerNewUserHandler(@ModelAttribute User user) {
+	public String registerNewUserHandler(@ModelAttribute User user, HttpServletRequest request) {
 		if (us.registerUser(user.getUserName(), user.getPassword())) {
 			return "login";
 		} else {
+			request.getSession().setAttribute("error", "Username is invalid or already in use");
 			return "error";
 		}
 	}
@@ -157,12 +165,27 @@ public class MainController {
 			request.getSession().setAttribute("userName", user.getUserName());
 			return profileHandler();
 		}
+		request.getSession().setAttribute("error", "Invalid Login Credentials. Please try again");
 		return new ModelAndView("error");
 	}
 	
 	@RequestMapping("/error")
 	public String errorHandler() {
 		return "error";
+	}
+	
+	@RequestMapping("/removeGame")
+	public ModelAndView removeGameHandler(@ModelAttribute UserGame ug) {
+		ugs.removeGame(userName, ug.getGameName());
+		return deleteHandler();
+	}
+
+	
+	@RequestMapping("/logout")
+	public String logoutHandler(HttpServletRequest request) {
+		request.getSession().setAttribute("userName", null);
+		this.userName = "";
+		return "login";
 	}
 
 }

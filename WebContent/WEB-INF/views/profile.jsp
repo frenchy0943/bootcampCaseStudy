@@ -24,6 +24,7 @@
 <%
 	if(session.getAttribute("userName") == null){
 		response.sendRedirect("error");
+		session.setAttribute("error", "You are not logged in");
 	}
 %>
     <div class = "container" style="background-color: #0b0c10; ">
@@ -34,7 +35,9 @@
                 <a href = "addGame">Add Game</a>|
                 <a href = "playGame">Play Game</a>|
                 <a href = "editGame">Edit Game</a>|
+                <a href = "deleteGame">Delete Game</a>|
                 <a href = "compare">Compare</a>|
+                <a href = "logout">Logout</a>|
             </nav>
         </div>
         <table>

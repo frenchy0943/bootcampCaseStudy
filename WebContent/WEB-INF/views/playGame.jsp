@@ -22,6 +22,7 @@
 <%
 	if(session.getAttribute("userName") == null){
 		response.sendRedirect("error");
+		session.setAttribute("error", "You are not logged in");
 	}
 %>
 
@@ -33,11 +34,11 @@
                 <a href = "addGame">Add Game</a>|
                 <a href = "#">Play Game</a>|
                 <a href = "editGame">Edit Game</a>|
+                <a href = "deleteGame">Delete Game</a>|
                 <a href = "compare">Compare</a>|
             </nav> 
         </div>
         <form action="updateGameHours" method = "POST">
-    <!--     <input type = "text" value = "Frenchy" name = "userName" readonly hidden = true/>  -->
             <select name="gameName">
 			<c:forEach var="game" items="${playListBean }">
                 <option value="${game.name}">${game.name} </option>
