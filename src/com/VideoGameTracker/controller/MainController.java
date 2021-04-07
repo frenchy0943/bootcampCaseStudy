@@ -106,7 +106,7 @@ public class MainController {
 
 	@RequestMapping("/editGameDetails")
 	public ModelAndView editGameDetailsHandler(@ModelAttribute UserGame ug) {
-		if (!userName.equals("")) {
+		if (!userName.equals("") && !ug.getGameName().equals("")) {
 			double gameHours = 0.0;
 			int timesCompleted = 0;
 			if(ug.getGameHours() == null) {
@@ -138,7 +138,7 @@ public class MainController {
 
 	@RequestMapping("/updateGameHours")
 	public ModelAndView updateGameHoursHandler(@ModelAttribute UserGameHours ugh) {
-		if (!userName.equals("")) {
+		if (!userName.equals("") && ugh.getGameName() != null) {
 			UserGame ug = ugs.getUserGame(userName, ugh.getGameName());
 			Double gameHours = ug.getGameHours() + ugh.getGameHours();
 			gameHours *= 100;

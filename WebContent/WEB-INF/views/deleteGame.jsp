@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-    <title>Document</title>
+    <title>Delete Game</title>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
@@ -26,7 +26,7 @@
 
     <div class = "container" style="background-color: #0b0c10; ">
         <div class = "jumbotron text-center" style ="background-color:#66fcf1">
-            <h1>Edit Game</h1>
+            <h1>Delete Game</h1>
             <nav>
                 |<a href = "profile">Profile</a>|
                 <a href = "addGame">Add Game</a>|
