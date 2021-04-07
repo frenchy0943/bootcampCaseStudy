@@ -33,12 +33,13 @@
                 <a href = "editGame">Edit Game</a>|
                 <a href = "deleteGame">Delete Game</a>|
                 <a href = "compare">Compare</a>|
+                <a href = "logout">Logout</a>|
             </nav>
         </div>
         <form action="addNewGame" method="POST">
-            <input type="text" name="gameName" placeholder="Name of Game"/>
-            <input type= "number" name = "gameHours" step = 0.01 placeholder="Hours Played"/>
-            <input type= "number" name = "timesCompleted" placeholder="Times Completed"/>
+            <input type="text" name="gameName" placeholder="Name of Game" required = "required"/>
+            <input type= "number" name = "gameHours" step = 0.01 placeholder="Hours Played" required = "required"/>
+            <input type= "number" name = "timesCompleted" placeholder="Times Completed" required = "required"/>
             <label style="color: white">Select a list</label>
              <select name="currentList">
                 <option value="backlog">Backlog</option>

@@ -34,6 +34,7 @@
                 <a href = "#">Edit Game</a>| 
                 <a href = "deleteGame">Delete Game</a>|
                 <a href = "compare">Compare</a>|
+                <a href = "logout">Logout</a>|
             </nav>
         </div>
         <form action="editGameDetails" method="POST">

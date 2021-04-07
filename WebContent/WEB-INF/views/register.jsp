@@ -22,8 +22,8 @@
             <h1>Register New Account</h1>
         </div>
         <form action="registerNewUser" method = "POST">
-            <input type="text" name = "userName" placeholder="Username"/>
-            <input type="password" name="password" placeholder="Password"/>
+            <input type="text" name = "userName" placeholder="Username" required = "required"/>
+            <input type="password" name="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">/>
             <button type = "submit" >Register</button>
         </form>
         <div style="color: white">
