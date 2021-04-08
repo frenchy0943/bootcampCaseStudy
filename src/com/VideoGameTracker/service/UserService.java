@@ -40,12 +40,12 @@ public class UserService {
 		return flag;
 	}
 	
-	public boolean registerUser(String userName, String password) {
-		if(!ur.existsById(userName)) {
-			ur.save(new User(userName, password));
+	public boolean registerUser(String userName, String password, String passwordVerification) {
+		if(!ur.existsById(userName) && password.equals(passwordVerification)) {
+			ur.save(new User(userName, password, passwordVerification));
 			return true;
 		}
-		//user with that username already exists error
+		
 		return false;
 	}
 	

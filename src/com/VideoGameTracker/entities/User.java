@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 
 @Entity
 public class User {
@@ -17,6 +18,9 @@ public class User {
 	private String userName;
 	
 	private String password;
+	
+	@Transient
+	private String passwordVerification;
 	
 	@ManyToMany(
 			targetEntity = Game.class,
@@ -44,9 +48,10 @@ public class User {
 	
 	}
 	
-	public User(String userName, String password) {
+	public User(String userName, String password, String passwordVerification) {
 		this.userName = userName;
 		this.password = password;
+		this.passwordVerification = passwordVerification;
 	}
 
 	public String getUserName() {
@@ -87,6 +92,14 @@ public class User {
 
 	public void setCompletedGames(List<Game> completedGames) {
 		this.completedGames = completedGames;
+	}
+
+	public String getPasswordVerification() {
+		return passwordVerification;
+	}
+
+	public void setPasswordVerification(String passwordVerification) {
+		this.passwordVerification = passwordVerification;
 	}
 
 	@Override

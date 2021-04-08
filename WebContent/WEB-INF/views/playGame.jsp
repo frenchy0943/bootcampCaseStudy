@@ -52,7 +52,7 @@
             <input type="number" name = "gameHours" id = "Time this session" value = 0 readonly>
             <button type="submit">Update Game</button>
         </form>
-        <div style = "color: white;" id = "note">Note: Timer NOT started. If you update now, your game will NOT be updated!</div>
+        <div style = "color: #66fcf1;" id = "note">Note: Timer NOT started. If you update now, your game will NOT be updated!</div>
     </div>
     
     

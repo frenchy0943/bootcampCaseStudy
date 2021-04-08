@@ -55,6 +55,7 @@
             </form>
         </div>
 
+		<div style = "color: white"><h4>The current game being compared is: <c:out value = "${nameOfGame }"/></h4></div>
         <table>
             <thead>
                 <tr>

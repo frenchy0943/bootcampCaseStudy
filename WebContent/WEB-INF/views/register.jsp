@@ -23,13 +23,14 @@
         </div>
         <form action="registerNewUser" method = "POST">
             <input type="text" name = "userName" placeholder="Username" required = "required"/>
-            <input type="password" name="password" placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters">/>
+            <input type="password" name="password" placeholder="Password" required = "required" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/>
+            <input type="password" name="passwordVerification" placeholder="Re-enter Password" required = "required" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/>
             <button type = "submit" >Register</button>
         </form>
         <div style="color: white">
            Already have an account? Click <a href="login">here</a> to login!
         </div>
-        <img src="/VideoGameTracker/resources/images/singleController.jpg" alt="" style="width: 100%">
+        <img src="/VideoGameTracker/resources/images/controllers.jpg" alt="" style="width: 100%">
     </div>
 </body>
 </html>

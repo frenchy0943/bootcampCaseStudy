@@ -51,8 +51,8 @@
                 <option value="current">Current</option>
                 <option value="completed">Completed</option>
             </select>
-            <input type= "number" name = "gameHours" step = 0.01 placeholder="Hours Played">
-            <input type= "number" name = "timesCompleted" placeholder="Times Completed">
+            <input type= "number" name = "gameHours" step = 0.01 placeholder="Hours Played" min = "0">
+            <input type= "number" name = "timesCompleted" placeholder="Times Completed" min = "0">
             <button type="submit">Update Game</button>
         </form>
         <div>

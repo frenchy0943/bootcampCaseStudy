@@ -34,31 +34,33 @@ public class MainController {
 
 	@RequestMapping("/")
 	public String indexHandler() {
-		return "login";// view file name
+		return "login";
 	}
 
 	@RequestMapping("/register")
 	public String registerHandler() {
-		return "register";// view file name
+		return "register";
 	}
 
 	@RequestMapping("/login")
 	public String loginHandler() {
-		return "login";// view file name
+		return "login";
 	}
 
 	@RequestMapping("/profile")
 	public ModelAndView profileHandler() {
 		ModelAndView mav = new ModelAndView("profile");
 		List<UserGame> userGames = ugs.getAllUserGamesById(userName);
-		System.out.println(userGames);
 		mav.addObject("profileListBean", userGames);
-		return mav;// view file name
+		return mav;
 	}
 
 	@RequestMapping("/addGame")
-	public String addGameHandler() {
-		return "addGame";// view file name
+	public ModelAndView addGameHandler() {
+		ModelAndView mav = new ModelAndView("addGame");
+		List<Game> games = gs.getAllGames();
+		mav.addObject("gameListBean", games);
+		return mav;
 	}
 
 	@RequestMapping("/playGame")
@@ -68,7 +70,7 @@ public class MainController {
 			List<Game> games = us.getById(userName).getCurrentGames();
 			mav.addObject("playListBean", games);
 		}
-		return mav;// view file name
+		return mav;
 	}
 
 	@RequestMapping("/editGame")
@@ -76,7 +78,7 @@ public class MainController {
 		ModelAndView mav = new ModelAndView("editGame");
 		List<UserGame> games = ugs.getAllUserGamesById(userName);
 		mav.addObject("editListBean", games);
-		return mav;// view file name
+		return mav;
 	}
 
 	@RequestMapping("/compare")
@@ -84,7 +86,7 @@ public class MainController {
 		ModelAndView mav = new ModelAndView("compare");
 		List<UserGame> userGames = ugs.getAllUserGamesById(userName);
 		mav.addObject("compareListBean", userGames);
-		return mav;// view file name
+		return mav;
 	}
 
 	@RequestMapping("/deleteGame")
@@ -96,16 +98,16 @@ public class MainController {
 	}
 
 	@RequestMapping("/addNewGame")
-	public String newGameHandler(@ModelAttribute UserGame ug) {
+	public String newGameHandler(@ModelAttribute UserGame ug, HttpServletRequest request) {
 		if (!userName.equals("")) {
 			ugs.linkUserAndGame(userName, ug.getGameName(), ug.getGameHours(), ug.getTimesCompleted(),
 					ug.getCurrentList());
 		}
-		return "addGame";
+		return "redirect:/addGame";
 	}
 
 	@RequestMapping("/editGameDetails")
-	public ModelAndView editGameDetailsHandler(@ModelAttribute UserGame ug) {
+	public String editGameDetailsHandler(@ModelAttribute UserGame ug) {
 		if (!userName.equals("") && !ug.getGameName().equals("")) {
 			double gameHours = 0.0;
 			int timesCompleted = 0;
@@ -122,7 +124,7 @@ public class MainController {
 			}
 			ugs.updateUserGame(userName, ug.getGameName(), gameHours, timesCompleted, ug.getCurrentList());
 		}
-		return editGameHandler();
+		return "redirect:/editGame";
 	}
 
 	@RequestMapping(value = "/compareWithUsers", params = "hoursSort")
@@ -130,6 +132,7 @@ public class MainController {
 		ModelAndView mav = compareHandler();
 		if (!userName.equals("")) {
 			List<UserGame> userGames = ugs.getAllByGameNameSortByHours(ug.getGameName());
+			mav.addObject("nameOfGame", ug.getGameName());
 			mav.addObject("compareGamesListBean", userGames);
 		}
 		return mav;
@@ -140,13 +143,14 @@ public class MainController {
 		ModelAndView mav = compareHandler();
 		if (!userName.equals("")) {
 			List<UserGame> userGames = ugs.getAllByGameNameSortByCompletions(ug.getGameName());
+			mav.addObject("nameOfGame", ug.getGameName());
 			mav.addObject("compareGamesListBean", userGames);
 		}
 		return mav;
 	}
 
 	@RequestMapping("/updateGameHours")
-	public ModelAndView updateGameHoursHandler(@ModelAttribute UserGameHours ugh) {
+	public String updateGameHoursHandler(@ModelAttribute UserGameHours ugh) {
 		if (!userName.equals("") && ugh.getGameName() != null) {
 			UserGame ug = ugs.getUserGame(userName, ugh.getGameName());
 			Double gameHours = ug.getGameHours() + ugh.getGameHours();
@@ -154,28 +158,32 @@ public class MainController {
 			gameHours = (double) Math.round(gameHours) / 100;
 			ugs.updateGameHours(ug.getUserName(), ug.getGameName(), gameHours);
 		}
-		return playGameHandler();
+		return "redirect:/playGame";
 	}
 
 	@RequestMapping("/registerNewUser")
 	public String registerNewUserHandler(@ModelAttribute User user, HttpServletRequest request) {
-		if (us.registerUser(user.getUserName(), user.getPassword())) {
-			return "login";
+		if (us.registerUser(user.getUserName(), user.getPassword(), user.getPasswordVerification())) {
+			return "redirect:/login";
 		} else {
-			request.getSession().setAttribute("error", "Username is already in use");
-			return "error";
+			if(user.getPassword().equals(user.getPasswordVerification())) {
+				request.getSession().setAttribute("error", "Username is already in use");
+			}else {
+				request.getSession().setAttribute("error", "Passwords do not match");
+			}
+			return "redirect:/error";
 		}
 	}
 
 	@RequestMapping("/loginAttempt")
-	public ModelAndView loginAttemptHandler(@ModelAttribute User user, HttpServletRequest request) {
+	public String loginAttemptHandler(@ModelAttribute User user, HttpServletRequest request) {
 		if (us.validateUser(user.getUserName(), user.getPassword())) {
 			this.userName = user.getUserName();
 			request.getSession().setAttribute("userName", user.getUserName());
-			return profileHandler();
+			return "redirect:/profile";
 		}
 		request.getSession().setAttribute("error", "Invalid Login Credentials. Please try again");
-		return new ModelAndView("error");
+		return "redirect:/error";
 	}
 
 	@RequestMapping("/error")
@@ -184,18 +192,18 @@ public class MainController {
 	}
 
 	@RequestMapping("/removeGame")
-	public ModelAndView removeGameHandler(@ModelAttribute UserGame ug) {
+	public String removeGameHandler(@ModelAttribute UserGame ug) {
 		if (!ug.getGameName().equals("")) {
 			ugs.removeGame(userName, ug.getGameName());
 		}
-		return deleteHandler();
+		return "redirect:/deleteGame";
 	}
 
 	@RequestMapping("/logout")
 	public String logoutHandler(HttpServletRequest request) {
 		request.getSession().setAttribute("userName", null);
 		this.userName = "";
-		return "login";
+		return "redirect:/login";
 	}
 
 }
