@@ -71,11 +71,11 @@ public class UserGameService {
 	}
 
 	public List<UserGame> getAllByGameNameSortByHours(String gameName) {
-		return ugr.findAllByGameNameOrderByGameHoursDesc(gameName);
+		return ugr.findAllByGameNameOrderByGameHoursDescTimesCompletedDesc(gameName);
 	}
 	
 	public List<UserGame> getAllByGameNameSortByCompletions(String gameName){
-		return ugr.findAllByGameNameOrderByTimesCompletedDesc(gameName);
+		return ugr.findAllByGameNameOrderByTimesCompletedDescGameHoursDesc(gameName);
 	}
 
 	public void updateGameHours(String userName, String gameName, double hours) {
